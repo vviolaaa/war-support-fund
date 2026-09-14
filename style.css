@@ -16,3 +16,20 @@ body {
 .menu-item {
 
 }
+
+/* ==== FIRST SCREEN ==== */
+.first-screen {
+    background-image: url(./assets/images/background-image.png);
+    background-repeat: no-repeat;
+    background-size: cover;
+    height: 100vh;;
+}
+
+.main-title {
+    font-weight: 800;
+    font-size: 4.06em;
+}
+
+.main-description {
+
+}
