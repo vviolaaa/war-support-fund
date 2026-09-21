@@ -412,9 +412,130 @@ body {
 
 
 @media screen and (max-width: 500px) {
-    body {}
+    body {
+        font-size: 0.9em;
+    }
+
+    .header-container {
+        padding: 1.2em 1.5em;
+        flex-direction: column;
+        gap: 0.8em;
+    }
+
+    .menu-list {
+        flex-direction: column;
+        gap: 0.8em;
+    }
+
+    .menu-item {
+        margin-left: 0;
+    }
+
+    .first-screen {
+        height: auto;
+        padding: 2em 0;
+        margin-top: 10em;
+    }
+
+    .first-screen-container {
+        width: 100%;
+        padding: 0 1.5em;
+        text-align: center;
+        align-items: center;
+    }
+
+    .main-title {
+        font-size: 2.2em;
+    }
+
+    .quote-container {
+        height: auto;
+        padding: 3em 1.5em;
+    }
+
+    .quote-title {
+        font-size: 2rem;
+    }
+
+    .quote-subtitle {
+        font-size: 1.2rem;
+    }
+
+    .description-screen {
+        padding: 5vw 1.5em;
+    }
 
     .description-block {
         flex-direction: column;
+        padding: 1.5em;
+        gap: 1.5em;
+    }
+
+    .description-header {
+        font-size: 1.8rem;
+    }
+
+    .block-img {
+        max-width: 100%;
+    }
+
+    .mission-container {
+        flex-direction: column;
+        padding: 1.5em;
+        text-align: center;
+    }
+
+    .mission-wave {
+        display: none;
+    }
+
+    .mission-image {
+        position: static;
+        max-height: none;
+        width: 100%;
+        margin-top: 1em;
+    }
+
+    .support-screen {
+        height: auto;
+        padding: 3em 1.5em;
+    }
+
+    .support-text {
+        font-size: 2rem;
+    }
+
+    .support-stats-item {
+        font-size: 2rem;
+    }
+
+    .contacts-container {
+        flex-direction: column;
+        padding: 2em 1.5em;
+        gap: 2em;
+    }
+
+    .contacts-title {
+        font-size: 2rem;
+    }
+
+    .contacts-newsletter {
+        padding: 0 1.5em;
+    }
+
+    .contacts-newsletter-container {
+        flex-direction: column;
+        padding: 1.5em;
+        gap: 1.5em;
+    }
+
+    .contacts-newsletter-image img {
+        width: 100%;
+        height: auto;
+    }
+
+    .contacts-newsletter-input {
+        padding: 1em 1.5em;
+        font-size: 1rem;
     }
 }
