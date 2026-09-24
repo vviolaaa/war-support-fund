@@ -90,38 +90,81 @@
 
     document.querySelectorAll('.slider').forEach(initSlider);
 
-    // Форма підписки
+    // ---------- Форма підписки + EmailJS ----------
+
+    // Встав свої значення з панелі EmailJS (emailjs.com)
+    const EMAILJS_PUBLIC_KEY = 'BcStKS8AuhOarHFvk';   // Account → General → Public Key
+    const EMAILJS_SERVICE_ID = 'service_78h2zkl';   // Email Services → Service ID
+    const EMAILJS_TEMPLATE_ID = 'template_du5u86j'; // Email Templates → Template ID
+
+    if (typeof emailjs !== 'undefined') {
+        emailjs.init({ publicKey: EMAILJS_PUBLIC_KEY });
+    }
+
     const form = document.getElementById('newsletter-form');
     const status = document.getElementById('newsletter-status');
 
+    function showStatus(text, type) {
+        status.textContent = text;
+        status.className = `form-status is-${type}`;
+    }
+
     if (form && status) {
-        form.addEventListener('submit', (e) => {
+        const submitBtn = form.querySelector('button[type="submit"]');
+
+        form.addEventListener('submit', async (e) => {
             e.preventDefault();
 
             const nameInput = form.elements['subscriber-name'];
             const emailInput = form.elements['subscriber-email'];
             [nameInput, emailInput].forEach((i) => i.classList.remove('is-invalid'));
 
-            if (!nameInput.value.trim()) {
+            const name = nameInput.value.trim();
+            const email = emailInput.value.trim();
+
+            if (!name) {
                 nameInput.classList.add('is-invalid');
-                status.textContent = "Введіть, будь ласка, ім'я.";
-                status.className = 'form-status is-error';
+                showStatus("Введіть, будь ласка, ім'я.", 'error');
                 nameInput.focus();
                 return;
             }
 
-            if (!emailInput.checkValidity() || !emailInput.value.trim()) {
+            // Браузерна перевірка + твоя validateEmail (якщо підключена)
+            const emailOk =
+                email &&
+                emailInput.checkValidity() &&
+                (typeof validateEmail !== 'function' || validateEmail(email));
+
+            if (!emailOk) {
                 emailInput.classList.add('is-invalid');
-                status.textContent = 'Введіть коректний email, наприклад name@example.com.';
-                status.className = 'form-status is-error';
+                showStatus('Введіть коректний email, наприклад name@example.com.', 'error');
                 emailInput.focus();
                 return;
             }
 
-            // TODO: тут можна відправити дані на сервер / сервіс розсилок (fetch)
-            status.textContent = `Дякуємо, ${nameInput.value.trim()}! Ви підписані на розсилку.`;
-            status.className = 'form-status is-success';
-            form.reset();
+            if (typeof emailjs === 'undefined') {
+                showStatus('Сервіс розсилки не завантажився. Спробуйте пізніше.', 'error');
+                return;
+            }
+
+            // Відправка листа через EmailJS
+            submitBtn.disabled = true;
+            showStatus('Надсилаємо...', 'success');
+
+            try {
+                await emailjs.send(EMAILJS_SERVICE_ID, EMAILJS_TEMPLATE_ID, {
+                    name: name,    // {{name}} у шаблоні
+                    email: email,  // {{email}} у шаблоні (поле "To Email")
+                });
+
+                showStatus(`Дякуємо, ${name}! Ми надіслали лист на ${email}.`, 'success');
+                form.reset();
+            } catch (err) {
+                console.error('EmailJS error:', err);
+                showStatus('Не вдалося надіслати лист. Спробуйте ще раз пізніше.', 'error');
+            } finally {
+                submitBtn.disabled = false;
+            }
         });
     }
 })();
