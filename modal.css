@@ -1,0 +1,433 @@
+/* Стилі для карток (модальних вікон) і статусу форми.
+   Змінюй кольори тут або задай --accent у :root у style.css */
+
+:root {
+    --modal-accent: var(--accent, #1f5fbf);
+    --modal-text: #1d2733;
+    --modal-muted: #56606b;
+    --modal-bg: #ffffff;
+    --modal-card-bg: #f4f7fb;
+}
+
+html {
+    scroll-behavior: smooth;
+}
+
+body.modal-open {
+    overflow: hidden;
+}
+
+.modal {
+    box-sizing: border-box;
+    width: min(960px, calc(100% - 32px));
+    max-height: calc(100vh - 32px);
+    padding: 0;
+    border: 0;
+    border-radius: 20px;
+    background: var(--modal-bg);
+    color: var(--modal-text);
+    font-family: inherit;
+    overflow-x: hidden;
+    overflow-y: auto;
+    margin: auto;
+}
+
+.modal--narrow {
+    width: min(560px, calc(100% - 32px));
+}
+
+.modal--wide {
+    width: min(1060px, calc(100% - 32px));
+}
+
+.modal::backdrop {
+    background: rgba(15, 25, 40, 0.6);
+}
+
+.modal[open] {
+    animation: modal-in 0.22s ease-out;
+}
+
+@keyframes modal-in {
+    from {
+        opacity: 0;
+        transform: translateY(12px) scale(0.98);
+    }
+}
+
+.modal-inner {
+    box-sizing: border-box;
+    position: relative;
+    padding: 40px 32px 32px;
+}
+
+.modal--wide .modal-inner {
+    padding: 28px 84px 28px;
+}
+
+.modal-title {
+    margin: 0 0 24px;
+    padding-right: 40px;
+    font-size: 28px;
+    font-weight: 700;
+    line-height: 1.2;
+}
+
+.modal-close {
+    position: absolute;
+    top: 16px;
+    right: 16px;
+    z-index: 2;
+    width: 40px;
+    height: 40px;
+    border: 0;
+    border-radius: 50%;
+    background: var(--modal-card-bg);
+    color: var(--modal-text);
+    font-size: 26px;
+    line-height: 1;
+    cursor: pointer;
+}
+
+.modal-close:hover {
+    background: #e3e9f2;
+}
+
+.info-card {
+    box-sizing: border-box;
+    display: flex;
+    flex-direction: column;
+    align-items: flex-start;
+    gap: 14px;
+    padding: 20px;
+    border-radius: 16px;
+    background: var(--modal-card-bg);
+}
+
+.info-card-title {
+    margin: 0;
+    font-size: 22px;
+    font-weight: 700;
+}
+
+.info-card-text {
+    margin: 0;
+    font-size: 15px;
+    line-height: 1.5;
+    color: var(--modal-muted);
+}
+
+.info-card-list {
+    margin: 0;
+    padding-left: 20px;
+    list-style: disc;
+    font-size: 16px;
+    line-height: 1.6;
+}
+
+.info-card .button {
+    margin-top: auto;
+}
+
+.modal button:focus-visible {
+    outline: 3px solid var(--modal-accent);
+    outline-offset: 2px;
+}
+
+/* ---------- Слайдер ---------- */
+
+.modal-head {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    flex-wrap: wrap;
+    gap: 8px 20px;
+    margin-bottom: 16px;
+    padding-right: 48px;
+}
+
+.modal-head .modal-title {
+    margin: 0;
+    padding: 0;
+}
+
+.slider-dots {
+    display: flex;
+    gap: 10px;
+}
+
+.slider-dot {
+    width: 12px;
+    height: 12px;
+    padding: 0;
+    border: 0;
+    border-radius: 50%;
+    background: #c8d1de;
+    cursor: pointer;
+    transition: background 0.15s, transform 0.15s;
+}
+
+.slider-dot.is-active {
+    background: var(--modal-accent);
+    transform: scale(1.25);
+}
+
+.slider-stage {
+    position: relative;
+}
+
+.slider-viewport {
+    overflow: hidden;
+    border-radius: 16px;
+}
+
+.slider-track {
+    display: flex;
+    transition: transform 0.35s ease;
+}
+
+.slide.info-card {
+    flex: 0 0 100%;
+    min-width: 0;
+    display: grid;
+    grid-template-columns: minmax(0, 5fr) minmax(0, 7fr);
+    gap: 24px;
+    align-items: stretch;
+    padding: 20px;
+}
+
+.slide-media {
+    position: relative;
+    min-height: 220px;
+    border-radius: 12px;
+    overflow: hidden;
+}
+
+.slide-media img {
+    position: absolute;
+    inset: 0;
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+}
+
+.slide-media--icon {
+    display: grid;
+    place-items: center;
+    color: var(--modal-accent);
+    background: #dfe9f7;
+    background: color-mix(in srgb, var(--modal-accent) 14%, white);
+}
+
+.slide-body {
+    display: flex;
+    flex-direction: column;
+    align-items: flex-start;
+    gap: 12px;
+    min-width: 0;
+}
+
+.slide-details {
+    width: 100%;
+    margin: 0;
+    display: grid;
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+    gap: 12px 20px;
+}
+
+.slide-details > div:last-child:nth-child(odd) {
+    grid-column: 1 / -1;
+}
+
+.slide-details dt {
+    margin-bottom: 2px;
+    font-size: 15px;
+    font-weight: 700;
+    line-height: 1.3;
+}
+
+.slide-details dd {
+    margin: 0;
+    font-size: 14px;
+    line-height: 1.45;
+    color: var(--modal-muted);
+}
+
+.slide-note {
+    margin: 0;
+    padding-left: 14px;
+    border-left: 3px solid var(--modal-accent);
+    font-size: 14px;
+    line-height: 1.5;
+}
+
+.slider-arrow {
+    position: absolute;
+    top: 50%;
+    transform: translateY(-50%);
+    display: grid;
+    place-items: center;
+    width: 48px;
+    height: 48px;
+    border: 0;
+    border-radius: 50%;
+    background: var(--modal-card-bg);
+    color: var(--modal-text);
+    cursor: pointer;
+    transition: background 0.15s, opacity 0.15s;
+}
+
+.slider-arrow--prev {
+    left: -66px;
+}
+
+.slider-arrow--next {
+    right: -66px;
+}
+
+.slider-arrow:hover:not(:disabled) {
+    background: #e3e9f2;
+}
+
+.slider-arrow:disabled {
+    opacity: 0.35;
+    cursor: default;
+}
+
+/* Низькі екрани (ноутбуки): стискаємо, щоб не було скролбара */
+@media (max-height: 760px) {
+    .modal--wide .modal-inner {
+        padding-top: 20px;
+        padding-bottom: 20px;
+    }
+
+    .modal-head .modal-title {
+        font-size: 22px;
+    }
+
+    .slide.info-card {
+        gap: 20px;
+        padding: 16px;
+    }
+
+    .slide-body {
+        gap: 8px;
+    }
+
+    .info-card-title {
+        font-size: 19px;
+    }
+
+    .info-card-text,
+    .slide-details dd,
+    .slide-note {
+        font-size: 13px;
+        line-height: 1.4;
+    }
+
+    .slide-details {
+        gap: 8px 16px;
+    }
+
+    .slide-details dt {
+        font-size: 14px;
+    }
+}
+
+@media (max-height: 640px) {
+    .slide-note {
+        display: none;
+    }
+}
+
+/* Телефони: картка в одну колонку, стрілки на фото */
+@media (max-width: 800px) {
+    .modal--wide .modal-inner {
+        padding: 20px 16px 16px;
+    }
+
+    .modal-title {
+        font-size: 22px;
+    }
+
+    .slide.info-card {
+        grid-template-columns: 1fr;
+        gap: 14px;
+        padding: 12px;
+    }
+
+    .slide-media {
+        min-height: 0;
+        height: 150px;
+    }
+
+    .slide-details {
+        grid-template-columns: 1fr;
+    }
+
+    .slider-arrow {
+        top: 87px;
+        width: 40px;
+        height: 40px;
+        background: rgba(255, 255, 255, 0.9);
+        box-shadow: 0 2px 8px rgba(0, 0, 0, 0.2);
+    }
+
+    .slider-arrow--prev {
+        left: 18px;
+    }
+
+    .slider-arrow--next {
+        right: 18px;
+    }
+}
+
+/* ---------- Статус форми ---------- */
+
+.form-status {
+    margin: 12px 0 0;
+    font-size: 15px;
+    min-height: 1.4em;
+}
+
+.form-status.is-success {
+    color: #1c7a3f;
+}
+
+.form-status.is-error {
+    color: #b3261e;
+}
+
+.contacts-newsletter-input.is-invalid {
+    outline: 2px solid #b3261e;
+}
+
+.info-card-actions {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 12px;
+}
+
+/* однаковий вигляд для <button> і <a> */
+.info-card-actions .button {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    box-sizing: border-box;
+    width: 100%;
+    padding: 16px 20px;
+    font-family: inherit;
+    font-size: 15px;
+    font-weight: 500;
+    line-height: 1.2;
+    text-align: center;
+    text-decoration: none;
+    white-space: nowrap;
+}
+
+/* на вузьких екранах кнопки одна під одною */
+@media (max-width: 560px) {
+    .info-card-actions {
+        grid-template-columns: 1fr;
+    }
+}

@@ -1,0 +1,229 @@
+/* ==========================================================
+   animations.css — підключати ПІСЛЯ style.css і modal.css
+   Використовує окремі властивості translate / scale замість transform,
+   щоб не ламати вже наявні transform у ваших стилях.
+   ========================================================== */
+
+:root {
+    --anim-accent: #6fdcff; /* колір смуги прокручування — підлаштуйте під фірмовий */
+    --ease-out: cubic-bezier(0.22, 0.61, 0.36, 1);
+}
+
+html {
+    scroll-behavior: smooth;
+    /* відступ під шапку. Підлаштуйте під реальну висоту header */
+    scroll-padding-top: 90px;
+}
+
+/* блоки, що заїжджають збоку, не повинні давати горизонтальний скрол */
+body {
+    overflow-x: clip;
+}
+
+/* ---------- Смуга прогресу прокручування ---------- */
+.scroll-progress {
+    position: fixed;
+    inset: 0 0 auto 0;
+    height: 3px;
+    z-index: 1000;
+    background: var(--anim-accent);
+    transform-origin: left center;
+    scale: var(--progress, 0) 1;
+    pointer-events: none;
+}
+
+/* ---------- Слова заголовків: виїжджають з-під «маски» ---------- */
+.split .word {
+    display: inline-block;
+}
+.split .word-inner {
+    display: inline-block;
+}
+
+.split--rise .word {
+    overflow: hidden;
+    vertical-align: top;
+    /* запас знизу, щоб не обрізались хвостики літер (р, у, д) */
+    padding-bottom: 0.18em;
+    margin-bottom: -0.18em;
+}
+.js .split--rise:not(.is-visible) .word-inner {
+    translate: 0 115%;
+}
+.split--rise.is-visible .word-inner {
+    animation: word-rise 0.85s var(--ease-out) backwards;
+    animation-delay: calc(var(--i) * 70ms);
+}
+@keyframes word-rise {
+    from { translate: 0 115%; }
+    to   { translate: 0 0; }
+}
+
+/* Слова абзацу: проявляються з розмиття */
+.js .split--fade:not(.is-visible) .word-inner {
+    opacity: 0;
+}
+.split--fade.is-visible .word-inner {
+    animation: word-fade 0.8s ease-out backwards;
+    animation-delay: calc(var(--i) * 45ms);
+}
+@keyframes word-fade {
+    from { opacity: 0; filter: blur(10px); translate: 0 0.4em; }
+    to   { opacity: 1; filter: blur(0);    translate: 0 0; }
+}
+
+/* ---------- Загальна поява: знизу вгору ---------- */
+.js .reveal:not(.is-visible) {
+    opacity: 0;
+}
+.js .reveal.is-visible {
+    animation: rise 0.8s var(--ease-out) backwards;
+    animation-delay: var(--reveal-delay, 0ms);
+}
+@keyframes rise {
+    from { opacity: 0; translate: 0 36px; }
+    to   { opacity: 1; translate: 0 0; }
+}
+
+/* ---------- Картинка «вискакує» (місія) ---------- */
+.js .reveal-pop:not(.is-visible) {
+    opacity: 0;
+}
+.js .reveal-pop.is-visible {
+    animation: pop 1s var(--ease-out) backwards;
+    animation-delay: var(--reveal-delay, 0ms);
+}
+@keyframes pop {
+    from { opacity: 0; scale: 0.8; translate: 0 56px; }
+    to   { opacity: 1; scale: 1;   translate: 0 0; }
+}
+
+/* ---------- Блоки «Реабілітаційний центр» / «Робота з дітьми» ----------
+   Текст і картинка заїжджають з протилежних боків.
+   Напрямок JS визначає сам: де стоїть текст, звідти він і летить.
+   На вузьких екранах (елементи одне під одним) — просто знизу вгору. */
+.description-block {
+    --content-dx: 0px;
+    --content-dy: 40px;
+    --img-dx: 0px;
+    --img-dy: 40px;
+}
+.description-block.content-left {
+    --content-dx: -100px;
+    --content-dy: 0px;
+    --img-dx: 100px;
+    --img-dy: 0px;
+}
+.description-block.content-right {
+    --content-dx: 100px;
+    --content-dy: 0px;
+    --img-dx: -100px;
+    --img-dy: 0px;
+}
+
+.js .description-block:not(.is-visible) .description-content,
+.js .description-block:not(.is-visible) .block-img {
+    opacity: 0;
+}
+.description-block.is-visible .description-content {
+    animation: slide-content 0.95s var(--ease-out) backwards;
+}
+.description-block.is-visible .block-img {
+    animation: reveal-image 1.2s var(--ease-out) 0.15s backwards;
+}
+@keyframes slide-content {
+    from { opacity: 0; translate: var(--content-dx) var(--content-dy); }
+    to   { opacity: 1; translate: 0 0; }
+}
+@keyframes reveal-image {
+    from {
+        opacity: 0;
+        translate: var(--img-dx) var(--img-dy);
+        scale: 1.12;
+        clip-path: inset(0 0 100% 0);
+    }
+    to {
+        opacity: 1;
+        translate: 0 0;
+        scale: 1;
+        clip-path: inset(0 0 0 0);
+    }
+}
+
+/* ---------- Активний пункт меню ---------- */
+.menu-item a {
+    position: relative;
+}
+.menu-item a::after {
+    content: "";
+    position: absolute;
+    left: 0;
+    right: 0;
+    bottom: -6px;
+    height: 2px;
+    background: currentColor;
+    transform: scaleX(0);
+    transform-origin: left center;
+    transition: transform 0.3s ease;
+}
+.menu-item a:hover::after,
+.menu-item a.is-active::after {
+    transform: scaleX(1);
+}
+
+/* ---------- Модальні вікна (<dialog>) ---------- */
+dialog.modal {
+    opacity: 0;
+    translate: 0 24px;
+    scale: 0.97;
+    transition:
+        opacity 0.3s ease,
+        translate 0.3s ease,
+        scale 0.3s ease,
+        overlay 0.3s allow-discrete,
+        display 0.3s allow-discrete;
+}
+dialog.modal[open] {
+    opacity: 1;
+    translate: 0 0;
+    scale: 1;
+}
+@starting-style {
+    dialog.modal[open] {
+        opacity: 0;
+        translate: 0 24px;
+        scale: 0.97;
+    }
+}
+dialog.modal::backdrop {
+    opacity: 0;
+    transition:
+        opacity 0.3s ease,
+        overlay 0.3s allow-discrete,
+        display 0.3s allow-discrete;
+}
+dialog.modal[open]::backdrop {
+    opacity: 1;
+}
+@starting-style {
+    dialog.modal[open]::backdrop {
+        opacity: 0;
+    }
+}
+
+/* ---------- Повага до налаштування «зменшити анімацію» ---------- */
+@media (prefers-reduced-motion: reduce) {
+    html {
+        scroll-behavior: auto;
+    }
+    *,
+    *::before,
+    *::after {
+        animation-duration: 0.01ms !important;
+        animation-delay: 0ms !important;
+        transition-duration: 0.01ms !important;
+    }
+    .scroll-progress {
+        display: none;
+    }
+}
