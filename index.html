@@ -167,6 +167,34 @@
         </div>
     </section>
 
+    <footer class="footer">
+        <div class="footer-container">
+            <div class="footer-about">
+                <p class="footer-title">Фонд підтримки постраждалих від війни</p>
+                <p class="footer-text">Психологічна та гуманітарна допомога українцям</p>
+            </div>
+
+            <nav class="footer-nav" aria-label="Навігація у футері">
+                <p class="footer-heading">Розділи</p>
+                <a href="#home">Головна</a>
+                <a href="#work">З чим ми працюємо</a>
+                <a href="#support">Підтримати фонд</a>
+                <a href="#contacts">Контакти</a>
+            </nav>
+
+            <div class="footer-contacts">
+                <p class="footer-heading">Зв'яжіться з нами</p>
+                <a href="tel:0987654321">0-987-654-321</a>
+                <a href="https://send.monobank.ua/jar/8VKoiC3p6q" target="_blank" rel="noopener noreferrer">Підтримати
+                    на банку</a>
+            </div>
+        </div>
+
+        <p class="footer-bottom">
+            © <span id="footer-year">2026</span> Фонд підтримки постраждалих від війни. Усі права захищені.
+        </p>
+    </footer>
+
     <!-- Слайдер: З чим ми працюємо -->
     <dialog class="modal modal--wide" id="modal-work" aria-labelledby="modal-work-title">
         <div class="modal-inner">
@@ -380,6 +408,10 @@
                 </div>
             </article>
         </div>
+
+        <script>
+            document.getElementById('footer-year').textContent = new Date().getFullYear();
+        </script>
     </dialog>
 </body>
 
